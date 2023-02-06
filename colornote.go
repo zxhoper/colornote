@@ -146,7 +146,7 @@ func eewPfn(w io.Writer, pfix string, format string, a ...interface{}) {
 
 func NoteftColor(c string, format string, a ...interface{}) {
 	formatColor := fmt.Sprintf("%s%s%s", c, format, prepareColorCode(clrNon))
-	eewPft(os.Stdout, formatColor, denotePrefix, a...)
+	eewPft(os.Stdout, formatColor, notePrefix, a...)
 }
 
 func NoteftRed(format string, a ...interface{}) {
