@@ -146,7 +146,11 @@ func eewPfn(w io.Writer, pfix string, format string, a ...interface{}) {
 
 func NoteftColor(c string, format string, a ...interface{}) {
 	formatColor := fmt.Sprintf("%s%s%s", c, format, prepareColorCode(clrNon))
-	eewPft(os.Stdout, formatColor, notePrefix, a...)
+	prefixedFormatColor := notePrefix + formatColor
+	hrColor := fmt.Sprintf("%s%s%s", c, eeStrRepeat("=", 51), prepareColorCode(clrNon))
+	_, _ = fmt.Fprintln(os.Stdout, notePrefix+hrColor)
+	_, _ = fmt.Fprintf(os.Stdout, prefixedFormatColor, a...)
+	_, _ = fmt.Fprintln(os.Stdout, notePrefix+hrColor)
 }
 
 func NoteftRed(format string, a ...interface{}) {
@@ -179,9 +183,9 @@ func Noteft(format string, a ...interface{}) {
 }
 func eewPft(w io.Writer, pfix string, format string, a ...interface{}) {
 	prefixedFormat := pfix + format
-	_, _ = fmt.Fprintln(w, prefixedFormat+eeStrRepeat("=", 51))
+	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
 	_, _ = fmt.Fprintf(w, prefixedFormat, a...)
-	_, _ = fmt.Fprintln(w, prefixedFormat+eeStrRepeat("=", 51))
+	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
 }
 
 func NoteHr() {
