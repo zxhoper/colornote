@@ -7,6 +7,41 @@ import (
 	"strings"
 )
 
+func Example() {
+	NoteGreen("The color print setup is: OK")
+	NoteTYellowf("Color Notef is %s!\n", "OK")
+
+	PrintAutoColorNotef()
+	NoteAutof("Auto %s\n", "ONE")
+	NoteAutof("Auto %s\n", "TWO")
+	NoteAutof("Auto %s\n", "THREE")
+
+	Notefn("Format line with %s appended.", "NEWLINE")
+
+	PrintAllColorNotef()
+
+	PrintAllColor()
+
+	PrintAllColorTitle()
+
+	NotePrefix = "PERFIX "
+	PrintAllColor()
+	PrintAllColorTitle()
+
+	ln := "line"
+	nl := "newline"
+
+	Notefn("Format %s with %s appended.", ln, nl)
+
+	MyDebug = true
+
+	DeNotefn("Format debug %s with %s appended.", ln, nl)
+
+	PrintAllDeNote()
+
+	NotePrefix = ""
+}
+
 func PrintAllColor() {
 	NoteBlockFirst()
 
