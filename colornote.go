@@ -7,124 +7,283 @@ import (
 	"strings"
 )
 
+func PrintAllColor() {
+	NoteBlockFirst()
+
+	Note("Default Note")
+	Notef("Default Notef\n")
+
+	NoteGreen("Green")
+	NoteRed("Red")
+	NoteYellow("Yellow")
+	NoteBlue("Blue")
+	NotePurple("Purple")
+	NoteCyan("Cyan")
+	NoteGray("Gray")
+	NoteWhite("White")
+	NoteBlockLast()
+
+	NoteHr()
+}
+func PrintAllColorNotef() {
+	NoteBlockFirst()
+
+	Notef("Default Notef\n")
+
+	NoteGreenf("Green")
+	NoteRedf("Red")
+	NoteYellowf("Yellow")
+	NoteBluef("Blue")
+	NotePurplef("Purple")
+	NoteCyanf("Cyan")
+	NoteGrayf("Gray")
+	NoteWhitef("White\n")
+
+	NoteWhitef("Print AUTO COLOR\n")
+	for i := 0; i < GetColorType(); i++ {
+
+		NoteAutof("Print auto color number: %d  ", i)
+	}
+
+	NoteBlockLast()
+
+	NoteHr()
+}
+func PrintAllColorTitle() {
+	NoteBlockFirst()
+	NoteT("Default NoteT")
+	NoteTf("Default Note Title \n")
+	NoteTGreenf("Green\n")
+	NoteTRedf("Red\n")
+	NoteTYellowf("Yellow\n")
+	NoteTBluef("Blue\n")
+	NoteTPurplef("Purple\n")
+	NoteTCyanf("Cyan\n")
+	NoteTGrayf("Gray\n")
+	NoteTWhitef("White\n")
+	NoteBlockLast()
+}
+
+func PrintAllDeNote() {
+	DeNoteBlockFirst()
+
+	DeNote("Note for debug")
+	DeNote("with debug prefix")
+	DeNoteHr()
+	DeNote("Default DeNore")
+
+	DeNoteTf("Default DeNotef\n")
+	DeNoteTGreenf("Green\n")
+	DeNoteTRedf("Red\n")
+	DeNoteTYellowf("Yellow\n")
+	DeNoteTBluef("Blue\n")
+	DeNoteTPurplef("Purple\n")
+	DeNoteTCyanf("Cyan\n")
+	DeNoteTGrayf("Gray\n")
+	DeNoteTWhitef("White\n")
+
+	DeNoteBlockLast()
+}
+
+func PrintAutoColorNotef() {
+	NoteBlockFirst()
+
+	NoteWhitef("AUTO COLOR\n")
+
+	idx := 0
+	for {
+		idx++
+		for i := 0; i < GetColorType(); i++ {
+			NoteAutof("Color %d ", i)
+		}
+		fmt.Printf("\n")
+		if idx > 10 {
+			break
+		}
+	}
+
+	NoteBlockLast()
+
+	NoteHr()
+}
+
 // ==============================================================================================
 var MyDebug = false
 
-var testPrefix = "    ---   | "
-var notePrefix = ""
-var denotePrefix = "=-=-=>"
+var TestPrefix = "    ---   | "
+var NotePrefix = ""
+var DeNotePrefix = "=-=-=>"
 
-const (
-	clrNon    = "0"
-	clrRed    = "31"
-	clrGreen  = "32"
-	clrYellow = "33"
-	clrBlue   = "34"
-	clrPurple = "35"
-	clrCyan   = "36"
-	clrGray   = "37"
-	clrWhite  = "97"
-)
+//
+//const (
+//	clrNon = "0"
+//
+//	clrRed    = "31"
+//	clrGreen  = "32"
+//	clrYellow = "33"
+//	clrBlue   = "34"
+//	clrPurple = "35"
+//	clrCyan   = "36"
+//	clrGray   = "37"
+//	clrWhite  = "97"
+//)
 
-func prepareColorCode(c string) string {
+var clr = map[string]string{
+	"Non":    "0",
+	"Red":    "31",
+	"Green":  "32",
+	"Yellow": "33",
+	"Blue":   "34",
+	"Purple": "35",
+	"Cyan":   "36",
+	"Gray":   "37",
+	"White":  "97",
+}
+
+func GetColorType() int {
+	return len(clr)
+}
+
+var Acc = newAutoColorControl()
+
+func getClrCode(c string) string {
 	return fmt.Sprintf("\033[%sm", c)
 }
 
-// eeP  eePt wraps fmt.Println with prefix
 func NoteColor(c string, a ...interface{}) {
-	_, _ = fmt.Fprintln(os.Stdout, c)
-	eewP(os.Stdout, notePrefix, a...)
-	_, _ = fmt.Fprintln(os.Stdout, "\033[0m")
+	_, _ = fmt.Fprintf(os.Stdout, c)
+	eewP(os.Stdout, NotePrefix, a...)
+	_, _ = fmt.Fprintf(os.Stdout, "\033[0m")
 }
 
 func NoteGreen(a ...interface{}) {
-	NoteColor(prepareColorCode(clrGreen), a...)
+	NoteColor(getClrCode(clr["Green"]), a...)
 }
 func NoteRed(a ...interface{}) {
-	NoteColor(prepareColorCode(clrRed), a...)
+	NoteColor(getClrCode(clr["Red"]), a...)
 }
 func NoteYellow(a ...interface{}) {
-	NoteColor(prepareColorCode(clrYellow), a...)
+	NoteColor(getClrCode(clr["Yellow"]), a...)
 }
 func NoteBlue(a ...interface{}) {
-	NoteColor(prepareColorCode(clrBlue), a...)
+	NoteColor(getClrCode(clr["Blue"]), a...)
 }
 func NotePurple(a ...interface{}) {
-	NoteColor(prepareColorCode(clrPurple), a...)
+	NoteColor(getClrCode(clr["Purple"]), a...)
 }
 func NoteCyan(a ...interface{}) {
-	NoteColor(prepareColorCode(clrCyan), a...)
+	NoteColor(getClrCode(clr["Cyan"]), a...)
 }
 func NoteGray(a ...interface{}) {
-	NoteColor(prepareColorCode(clrGray), a...)
+	NoteColor(getClrCode(clr["Gray"]), a...)
+}
+func NoteWhite(a ...interface{}) {
+	NoteColor(getClrCode(clr["White"]), a...)
 }
 
 func Note(a ...interface{}) {
-	eewP(os.Stdout, notePrefix, a...)
+	eewP(os.Stdout, NotePrefix, a...)
 }
-func deNote(a ...interface{}) {
+func DeNote(a ...interface{}) {
 	if MyDebug {
-		eewP(os.Stdout, denotePrefix, a...)
+		eewP(os.Stdout, DeNotePrefix, a...)
 	}
 }
 
 // eewP  wraps fmt.Println with prefix
 func eewP(w io.Writer, pfix string, a ...interface{}) {
 	var prefixedAny []interface{}
-	prefixedAny = append(prefixedAny, pfix)
+	if pfix != "" {
+		prefixedAny = append(prefixedAny, pfix)
+	}
 	prefixedAny = append(prefixedAny, a...)
 	_, _ = fmt.Fprintln(w, prefixedAny...)
 }
 
-// eePt wraps fmt.Println with prefix and print banner style title
-func Notet(s string) {
-	eewPt(os.Stdout, notePrefix, s)
+func NoteT(s string) {
+	eewPT(os.Stdout, NotePrefix, s)
 }
-func deNotet(s string) {
+func DeNoteT(s string) {
 	if MyDebug {
-		eewPt(os.Stdout, denotePrefix, s)
+		eewPT(os.Stdout, DeNotePrefix, s)
 	}
 }
-func eewPt(w io.Writer, pfix string, s string) {
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
+func eewPT(w io.Writer, pfix string, s string) {
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("=", 51))
 	_, _ = fmt.Fprintf(w, pfix+"== %-45s ==\n", s)
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("=", 51))
 }
 
-// eePf wraps fmt.Printf with prefix
 func Notef(format string, a ...interface{}) {
-	eewPf(os.Stdout, notePrefix, format, a...)
-}
-func NotefColor(c string, format string, a ...interface{}) {
-	formatColor := fmt.Sprintf("%s%s%s", c, format, prepareColorCode(clrNon))
-	eewPf(os.Stdout, notePrefix, formatColor, a...)
+	eewPf(os.Stdout, NotePrefix, format, a...)
 }
 
-func NotefGreen(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrGreen), format, a...)
-}
-func NotefRed(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrRed), format, a...)
-}
-func NotefYellow(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrYellow), format, a...)
-}
-func NotefBlue(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrBlue), format, a...)
-}
-func NotefPurple(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrPurple), format, a...)
-}
-func NotefCyan(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrCyan), format, a...)
-}
-func NotefGray(format string, a ...interface{}) {
-	NotefColor(prepareColorCode(clrGray), format, a...)
+type AutoCololrCtl struct {
+	TotalColor   int
+	Colors       []string
+	CurrentColor int
 }
 
-func deNotef(format string, a ...interface{}) {
+func newAutoColorControl() *AutoCololrCtl {
+	var colors []string
+	for _, c := range clr {
+		colors = append(colors, c)
+	}
+
+	return &AutoCololrCtl{
+		TotalColor:   GetColorType(),
+		Colors:       colors,
+		CurrentColor: 0,
+	}
+}
+
+func (acc *AutoCololrCtl) popCurColor() string {
+	current := acc.CurrentColor
+	if acc.CurrentColor == acc.TotalColor-1 {
+		acc.CurrentColor = 0
+	} else {
+		acc.CurrentColor = current + 1
+	}
+	return acc.Colors[current]
+}
+
+func NoteAutof(format string, a ...interface{}) {
+	NoteColorf(getClrCode(Acc.popCurColor()), format, a...)
+}
+
+func NoteColorf(colorCode string, format string, a ...interface{}) {
+	formatColor := fmt.Sprintf("%s%s%s", colorCode, format, getClrCode(clr["Non"]))
+	eewPf(os.Stdout, NotePrefix, formatColor, a...)
+}
+
+func NoteGreenf(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Green"]), format, a...)
+}
+func NoteRedf(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Red"]), format, a...)
+}
+func NoteYellowf(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Yellow"]), format, a...)
+}
+func NoteBluef(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Blue"]), format, a...)
+}
+func NotePurplef(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Purple"]), format, a...)
+}
+func NoteCyanf(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Cyan"]), format, a...)
+}
+func NoteGrayf(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["Gray"]), format, a...)
+}
+func NoteWhitef(format string, a ...interface{}) {
+	NoteColorf(getClrCode(clr["White"]), format, a...)
+}
+
+func DeNotef(format string, a ...interface{}) {
 	if MyDebug {
-		eewPf(os.Stdout, denotePrefix, format, a...)
+		eewPf(os.Stdout, DeNotePrefix, format, a...)
 	}
 }
 func eewPf(w io.Writer, pfix string, format string, a ...interface{}) {
@@ -134,93 +293,144 @@ func eewPf(w io.Writer, pfix string, format string, a ...interface{}) {
 }
 
 func Notefn(format string, a ...interface{}) {
-	eewPfn(os.Stdout, format, notePrefix, a...)
+	eewPfn(os.Stdout, format, NotePrefix, a...)
 }
-func deNotefn(format string, a ...interface{}) {
-	eewPfn(os.Stdout, format, denotePrefix, a...)
+func DeNotefn(format string, a ...interface{}) {
+	if MyDebug {
+		eewPfn(os.Stdout, DeNotePrefix, format, a...)
+	}
 }
 func eewPfn(w io.Writer, pfix string, format string, a ...interface{}) {
 	prefixedFormat := pfix + format + "\n"
 	_, _ = fmt.Fprintf(w, prefixedFormat, a...)
 }
 
-func NoteftColor(c string, format string, a ...interface{}) {
-	formatColor := fmt.Sprintf("%s%s%s", c, format, prepareColorCode(clrNon))
-	prefixedFormatColor := notePrefix + formatColor
-	hrColor := fmt.Sprintf("%s%s%s", c, eeStrRepeat("=", 51), prepareColorCode(clrNon))
-	_, _ = fmt.Fprintln(os.Stdout, notePrefix+hrColor)
+func NoteTColorf(c string, format string, a ...interface{}) {
+	formatColor := fmt.Sprintf("%s%s%s%s", c, "== ", format, getClrCode(clr["Non"]))
+	prefixedFormatColor := NotePrefix + formatColor
+	hrColor := fmt.Sprintf("%s%s%s", c, StringRepeat("=", 51), getClrCode(clr["Non"]))
+	_, _ = fmt.Fprintln(os.Stdout, NotePrefix+hrColor)
 	_, _ = fmt.Fprintf(os.Stdout, prefixedFormatColor, a...)
-	_, _ = fmt.Fprintln(os.Stdout, notePrefix+hrColor)
+	_, _ = fmt.Fprintln(os.Stdout, NotePrefix+hrColor)
 }
 
-func NoteftRed(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrRed), format, a...)
+func NoteTRedf(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Red"]), format, a...)
 }
-func NoteftGreen(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrGreen), format, a...)
+func NoteTGreenf(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Green"]), format, a...)
 }
-func NoteftYellow(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrYellow), format, a...)
+func NoteTYellowf(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Yellow"]), format, a...)
 }
-func NoteftBlue(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrBlue), format, a...)
+func NoteTBluef(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Blue"]), format, a...)
 }
-func NoteftPurple(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrPurple), format, a...)
+func NoteTPurplef(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Purple"]), format, a...)
 }
-func NoteftCyan(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrCyan), format, a...)
+func NoteTCyanf(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Cyan"]), format, a...)
 }
-func NoteftGray(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrGray), format, a...)
+func NoteTGrayf(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["Gray"]), format, a...)
 }
-func NoteftWhite(format string, a ...interface{}) {
-	NoteftColor(prepareColorCode(clrWhite), format, a...)
+func NoteTWhitef(format string, a ...interface{}) {
+	NoteTColorf(getClrCode(clr["White"]), format, a...)
 }
 
-func Noteft(format string, a ...interface{}) {
-	eewPft(os.Stdout, format, denotePrefix, a...)
+func NoteTf(format string, a ...interface{}) {
+	eewPft(os.Stdout, NotePrefix, format, a...)
+}
+
+func DeNoteTf(format string, a ...interface{}) {
+	if MyDebug {
+		eewPft(os.Stdout, DeNotePrefix, format, a...)
+	}
 }
 func eewPft(w io.Writer, pfix string, format string, a ...interface{}) {
-	prefixedFormat := pfix + format
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
+	prefixedFormat := pfix + "== " + format
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("=", 51))
 	_, _ = fmt.Fprintf(w, prefixedFormat, a...)
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("=", 51))
+}
+
+func DeNoteTColorf(c string, format string, a ...interface{}) {
+	if MyDebug {
+		formatColor := fmt.Sprintf("%s%s%s%s", c, "== ", format, getClrCode(clr["Non"]))
+		prefixedFormatColor := DeNotePrefix + formatColor
+		hrColor := fmt.Sprintf("%s%s%s", c, StringRepeat("=", 51), getClrCode(clr["Non"]))
+		_, _ = fmt.Fprintln(os.Stdout, DeNotePrefix+hrColor)
+		_, _ = fmt.Fprintf(os.Stdout, prefixedFormatColor, a...)
+		_, _ = fmt.Fprintln(os.Stdout, DeNotePrefix+hrColor)
+	}
+}
+
+func DeNoteTRedf(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Red"]), format, a...)
+}
+func DeNoteTGreenf(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Green"]), format, a...)
+}
+func DeNoteTYellowf(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Yellow"]), format, a...)
+}
+func DeNoteTBluef(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Blue"]), format, a...)
+}
+func DeNoteTPurplef(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Purple"]), format, a...)
+}
+func DeNoteTCyanf(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Cyan"]), format, a...)
+}
+func DeNoteTGrayf(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["Gray"]), format, a...)
+}
+func DeNoteTWhitef(format string, a ...interface{}) {
+	DeNoteTColorf(getClrCode(clr["White"]), format, a...)
 }
 
 func NoteHr() {
-	eewPhr(os.Stdout, notePrefix)
+	eewPhr(os.Stdout, NotePrefix)
 }
-func deNoteHr() {
-	eewPhr(os.Stdout, denotePrefix)
+func DeNoteHr() {
+	if MyDebug {
+		eewPhr(os.Stdout, DeNotePrefix)
+	}
 }
 func eewPhr(w io.Writer, pfix string) {
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("=", 51))
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("=", 72))
 }
 
-func NoteFirst() {
-	eewPFirst(os.Stdout, notePrefix)
+func NoteBlockFirst() {
+	eewPFirst(os.Stdout, NotePrefix)
 }
-func deNoteFirst() {
-	eewPFirst(os.Stdout, denotePrefix)
+func NoteBlockLast() {
+	eewPLast(os.Stdout, NotePrefix)
 }
+
+func DeNoteBlockFirst() {
+	if MyDebug {
+		eewPFirst(os.Stdout, DeNotePrefix)
+	}
+}
+func DeNoteBlockLast() {
+	if MyDebug {
+		eewPLast(os.Stdout, DeNotePrefix)
+	}
+}
+
 func eewPFirst(w io.Writer, pfix string) {
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("-", 64)+"\\\\")
-}
-
-func NoteLast() {
-	eewPLast(os.Stdout, notePrefix)
-}
-func deNoteLast() {
-	eewPLast(os.Stdout, denotePrefix)
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("-", 64)+"\\\\")
 }
 func eewPLast(w io.Writer, pfix string) {
-	_, _ = fmt.Fprintln(w, pfix+eeStrRepeat("-", 64)+"//")
+	_, _ = fmt.Fprintln(w, pfix+StringRepeat("-", 64)+"//")
 }
 
-func eeStrRepeat(s string, repeat int) string {
+func StringRepeat(s string, repeatTimes int) string {
 	var sb strings.Builder
-	for i := 0; i < repeat; i++ {
+	for i := 0; i < repeatTimes; i++ {
 		sb.WriteString(s)
 	}
 	return sb.String()
